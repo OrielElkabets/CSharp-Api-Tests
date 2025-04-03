@@ -2,6 +2,7 @@ using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using test_things.DTOs;
+using test_things.Entities;
 
 namespace test_things.Controllers
 {
@@ -12,13 +13,24 @@ namespace test_things.Controllers
         [HttpGet]
         public IActionResult GetUsers()
         {
-            return Ok(db.Users.AsNoTracking().Include(u => u.City).Select(UserDTO.FromEO));
+            return Ok(db.Users
+                .AsNoTracking()
+                .Include(u => u.City)
+                .Include(u => u.Pet)
+                .ThenInclude(p => p!.Type)
+                .Select(UserDTO.FromEO));
         }
 
         [HttpGet("{id}")]
         public IActionResult GetUser(int id)
         {
-            var user = db.Users.AsNoTracking().Include(u => u.City).FirstOrDefault(u => u.Id == id);
+            var user = db.Users
+                .AsNoTracking()
+                .Include(u => u.City)
+                .Include(u => u.Pet)
+                .ThenInclude(p => p!.Type)
+                .FirstOrDefault(u => u.Id == id);
+
             if (user is null) return NotFound($"User with ID '{id}' not found!");
             return Ok(UserDTO.FromEO(user));
         }
@@ -38,7 +50,11 @@ namespace test_things.Controllers
         [HttpGet("by-city/{name}")]
         public IActionResult GetUsersGroupd(string name)
         {
-            var city = db.Cities.AsNoTracking().Include(c => c.Users).FirstOrDefault(c => c.Name == name);
+            var city = db.Cities
+                .AsNoTracking()
+                .Include(c => c.Users)
+                .FirstOrDefault(c => c.Name == name);
+
             if (city is null) return BadRequest($"City '${name}' not exist in the system.");
 
             return Ok(new
@@ -52,8 +68,17 @@ namespace test_things.Controllers
         public IActionResult Create([FromBody] NewUserDTO newUser)
         {
             var city = db.Cities.FirstOrDefault(c => c.Name == newUser.City);
-            if (city is null) return BadRequest($"City '{newUser.City}' is not a valid city");
-            var user = newUser.ToEO(city);
+            if (city is null) return BadRequest($"City '{newUser.City}' is not valid");
+
+            PetEO? pet = null;
+            if (newUser.Pet is not null)
+            {
+                var type = db.PetsTypes.FirstOrDefault(pt => pt.Value == newUser.Pet.Type);
+                if (type is null) return BadRequest($"Pet Type '{newUser.Pet.Type}' is not valid");
+                pet = newUser.Pet.ToEO(type);
+            }
+
+            var user = newUser.ToEO(city, pet);
             db.Users.Add(user);
             db.SaveChanges();
             return CreatedAtAction(nameof(GetUser), new { user.Id }, UserDTO.FromEO(user));
