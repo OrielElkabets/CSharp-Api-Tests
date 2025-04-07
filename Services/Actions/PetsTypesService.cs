@@ -13,7 +13,7 @@ public class PetsTypesService(TestDbContext db, PetsTypesFactory petsTypesFactor
         return db.PetsTypes.AsNoTracking().Select(PetTypeDTO.FromEO);
     }
 
-    public OneOf<PetTypeDTO, PropertyNotFoundError> GetById(int id)
+    public OneOf<PetTypeDTO, PropertyNotFoundError> GetById(Ulid id)
     {
         var type = db.PetsTypes.AsNoTracking().FirstOrDefault(pt => pt.Id == id);
         if (type is null) return new PropertyNotFoundError("PetType", "ID", id);

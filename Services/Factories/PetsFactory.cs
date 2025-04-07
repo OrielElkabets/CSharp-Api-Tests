@@ -14,6 +14,7 @@ public class PetsFactory(TestDbContext db)
 
         return new PetEO
         {
+            Id = Ulid.NewUlid(),
             Name = dto.Name,
             Type = type
         };

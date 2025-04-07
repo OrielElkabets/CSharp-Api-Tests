@@ -14,6 +14,7 @@ public class PetsTypesFactory(TestDbContext db)
 
         return new PetTypeEO
         {
+            Id = Ulid.NewUlid(),
             Value = dto.Value
         };
     }

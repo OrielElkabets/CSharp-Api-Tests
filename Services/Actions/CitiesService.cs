@@ -13,7 +13,7 @@ public class CitiesService(TestDbContext db, CitiesFactory citiesFactory)
         return db.Cities.AsNoTracking().Select(CityDTO.FromEO);
     }
 
-    public OneOf<CityDTO, PropertyNotFoundError> GetById(int id)
+    public OneOf<CityDTO, PropertyNotFoundError> GetById(Ulid id)
     {
         var city = db.Cities.AsNoTracking().FirstOrDefault(c => c.Id == id);
         if (city is null) return new PropertyNotFoundError("City", "ID", id);

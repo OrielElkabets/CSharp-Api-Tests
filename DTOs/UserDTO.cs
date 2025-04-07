@@ -7,14 +7,14 @@ namespace test_things.DTOs;
 public class NewUserDTO
 {
     public required string Name { get; set; }
-    public required int CityId { get; set; }
+    public required Ulid CityId { get; set; }
     public NewPetDTO? Pet { get; set; }
 }
 
 
 public class UserDTO
 {
-    public int Id { get; set; }
+    public required Ulid Id { get; set; }
     public required string Name { get; set; }
     public required CityDTO City { get; set; }
     public PetDTO? Pet { get; set; }

@@ -6,13 +6,13 @@ namespace test_things.DTOs;
 public class NewPetDTO
 {
     public required string Name { get; set; }
-    public required int TypeId { get; set; }
+    public required Ulid TypeId { get; set; }
 }
 
 
 public class PetDTO
 {
-    public required int Id { get; set; }
+    public required Ulid Id { get; set; }
     public required string Name { get; set; }
     public required PetTypeDTO Type { get; set; }
 

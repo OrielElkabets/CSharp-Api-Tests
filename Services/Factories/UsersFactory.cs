@@ -16,11 +16,13 @@ public class UsersFactory(TestDbContext db, PetsFactory petsFactory)
         if (dto.Pet is not null)
         {
             var res = petsFactory.Build(dto.Pet);
-            if(res.IsT0) pet = res.AsT0;
-            return res.AsT1;
+            if (res.IsT1) return res.AsT1;
+            pet = res.AsT0;
         }
 
-        return new UserEO {
+        return new UserEO
+        {
+            Id = Ulid.NewUlid(),
             Name = dto.Name,
             City = city,
             Pet = pet

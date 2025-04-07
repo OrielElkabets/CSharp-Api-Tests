@@ -16,7 +16,7 @@ namespace test_things.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetUser(int id)
+        public IActionResult GetUser(Ulid id)
         {
             var res = usersService.GetUserById(id);
 

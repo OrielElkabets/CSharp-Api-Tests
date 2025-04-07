@@ -10,9 +10,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<TestDbContext>(options =>
 {
-    var connection = builder.Configuration.GetConnectionString("TestDb");
+    var connection = builder.Configuration.GetConnectionString("DemoDB");
     if (connection is null) throw new Exception("Couldn't find TestDb connection string");
-    options.UseNpgsql(connection);
+    options.UseNpgsql(connection).UseSnakeCaseNamingConvention();
 });
 
 builder.AddServices();

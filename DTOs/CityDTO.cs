@@ -9,7 +9,7 @@ public class NewCityDTO
 
 public class CityDTO
 {
-    public int Id { get; set; }
+    public required Ulid Id { get; set; }
     public required string Name { get; set; }
 
     public static CityDTO FromEO(CityEO city)

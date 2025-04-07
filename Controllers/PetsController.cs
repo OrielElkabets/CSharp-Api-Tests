@@ -26,7 +26,7 @@ namespace test_things.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetPetType(int id)
+        public IActionResult GetPetType(Ulid id)
         {
             var res = petsTypesService.GetById(id);
             return res.Match<IActionResult>(

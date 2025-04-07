@@ -16,7 +16,7 @@ namespace test_things.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCity(int id)
+        public IActionResult GetCity(Ulid id)
         {
             var res = citiesService.GetById(id);
             return res.Match<IActionResult>(

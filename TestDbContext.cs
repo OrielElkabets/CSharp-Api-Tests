@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using test_things.Converters;
 using test_things.Entities;
 
 namespace test_things;
@@ -29,5 +30,13 @@ public class TestDbContext(DbContextOptions<TestDbContext> options) : DbContext(
             .HasOne(p => p.Type)
             .WithMany(pt => pt.Pets)
             .HasForeignKey(p => p.TypeId);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder
+            .Properties<Ulid>()
+            .HaveConversion<UlidToStringConverter>()
+            .HaveConversion<UlidToBytesConverter>();
     }
 }

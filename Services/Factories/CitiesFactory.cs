@@ -14,6 +14,7 @@ public class CitiesFactory(TestDbContext db)
         
         return new CityEO
         {
+            Id = Ulid.NewUlid(),
             Name = dto.Name
         };
     }

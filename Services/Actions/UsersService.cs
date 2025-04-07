@@ -18,7 +18,7 @@ public class UsersService(TestDbContext db, UsersFactory usersFactory)
                 .Select(UserDTO.FromEO);
     }
 
-    public OneOf<UserDTO, PropertyNotFoundError> GetUserById(int id)
+    public OneOf<UserDTO, PropertyNotFoundError> GetUserById(Ulid id)
     {
         var user = db.Users
                 .AsNoTracking()
