@@ -1,4 +1,5 @@
 using test_things.Entities;
+using static test_things.DTOs.MappingHelper;
 
 namespace test_things.DTOs;
 
@@ -24,8 +25,8 @@ public class UserDTO
         {
             Id = user.Id,
             Name = user.Name,
-            City = CityDTO.FromEoOrThrow(user.City),
-            Pet = PetDTO.FromEOOrNull(user.Pet)
+            City = MapOrThrow(user.City, CityDTO.FromEO),
+            Pet = MapOrNull(user.Pet, PetDTO.FromEO),
         };
     }
 }

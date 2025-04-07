@@ -1,5 +1,4 @@
 using test_things.Entities;
-using test_things.Exceptions;
 
 namespace test_things.DTOs;
 
@@ -20,11 +19,5 @@ public class CityDTO
             Id = city.Id,
             Name = city.Name
         };
-    }
-
-    public static CityDTO FromEoOrThrow(CityEO? city)
-    {
-        if (city is null) throw new EntityNotLoadedException(nameof(CityEO));
-        return FromEO(city);
     }
 }

@@ -1,5 +1,4 @@
 using test_things.Entities;
-using test_things.Exceptions;
 
 namespace test_things.DTOs;
 
@@ -20,11 +19,5 @@ public class PetTypeDTO
             Id = type.Id,
             Value = type.Value
         };
-    }
-
-    public static PetTypeDTO FromEOOrThrow(PetTypeEO? type)
-    {
-        if (type is null) throw new EntityNotLoadedException(nameof(PetTypeEO));
-        return FromEO(type);
     }
 }

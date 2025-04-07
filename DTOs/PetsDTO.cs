@@ -1,5 +1,5 @@
 using test_things.Entities;
-using test_things.Exceptions;
+using static test_things.DTOs.MappingHelper;
 
 namespace test_things.DTOs;
 
@@ -22,13 +22,7 @@ public class PetDTO
         {
             Id = pet.Id,
             Name = pet.Name,
-            Type = PetTypeDTO.FromEOOrThrow(pet.Type)
+            Type = MapOrThrow(pet.Type, PetTypeDTO.FromEO)
         };
-    }
-
-    public static PetDTO? FromEOOrNull(PetEO? pet)
-    {
-        if (pet is null) return null;
-        return FromEO(pet);
     }
 }
