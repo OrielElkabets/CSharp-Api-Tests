@@ -1,48 +1,48 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using test_things.DTOs;
+using test_things.Services.Actions;
 
 namespace test_things.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PetsController(TestDbContext db) : ControllerBase
+    public class PetsController(PetsService petsService) : ControllerBase
     {
         [HttpGet]
         public IActionResult GetPets()
         {
-            var res = db.Pets.AsNoTracking().Include(p => p.Type).Select(PetDTO.FromEO);
-            return Ok(res);
+            return Ok(petsService.GetAll());
         }
     }
 
     [Route("api/pets/types")]
     [ApiController]
-    public class PetsTypesController(TestDbContext db) : ControllerBase
+    public class PetsTypesController(PetsTypesService petsTypesService) : ControllerBase
     {
         [HttpGet]
         public IActionResult GetPetsTypes()
         {
-            var res = db.PetsTypes.AsNoTracking().Select(PetTypeDTO.FromEO);
-            return Ok(res);
+            return Ok(petsTypesService.GetAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetPetType(int id)
         {
-            var type = db.PetsTypes.AsNoTracking().FirstOrDefault(pt => pt.Id == id);
-            if (type is null) return NotFound($"PetType with ID '{id}' not found!");
-            return Ok(PetTypeDTO.FromEO(type));
+            var res = petsTypesService.GetById(id);
+            return res.Match<IActionResult>(
+                Ok,
+                NotFound
+            );
         }
 
         [HttpPost]
         public IActionResult Create([FromBody] NewPetTypeDTO newType)
         {
-            var type = newType.ToEO();
-            db.PetsTypes.Add(type);
-            db.SaveChanges();
-            return CreatedAtAction(nameof(GetPetType), new { type.Id }, PetTypeDTO.FromEO(type));
+            var res = petsTypesService.Create(newType);
+            return res.Match<IActionResult>(
+                type => CreatedAtAction(nameof(GetPetType), new { type.Id }, type),
+                BadRequest
+            );
         }
     }
 }

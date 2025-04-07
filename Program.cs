@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using test_things;
+using test_things.Setup;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddDbContext<TestDbContext>(options =>
     if (connection is null) throw new Exception("Couldn't find TestDb connection string");
     options.UseNpgsql(connection);
 });
+
+builder.AddServices();
 
 var app = builder.Build();
 
