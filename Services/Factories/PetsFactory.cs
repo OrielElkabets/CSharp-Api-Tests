@@ -9,6 +9,7 @@ public class PetsFactory(TestDbContext db)
 {
     public OneOf<PetEO, BadRequestError> Build(NewPetDTO dto)
     {
+        dto = Normalize(dto);
         var type = db.PetsTypes.FirstOrDefault(pt => pt.Id == dto.TypeId);
         if (type is null) return new BadRequestError($"TypeId '{dto.TypeId}' is not valid");
 
@@ -18,5 +19,10 @@ public class PetsFactory(TestDbContext db)
             Name = dto.Name,
             Type = type
         };
+    }
+
+    private NewPetDTO Normalize(NewPetDTO dto) {
+        dto.Name = dto.Name.ToLower();
+        return dto;
     }
 }

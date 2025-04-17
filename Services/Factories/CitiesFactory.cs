@@ -9,6 +9,7 @@ public class CitiesFactory(TestDbContext db)
 {
     public OneOf<CityEO, ExistError> Build(NewCityDTO dto)
     {
+        dto = Nortmalize(dto);
         var exist = db.Cities.Any(c => c.Name == dto.Name);
         if (exist) return new ExistError("City", "name", dto.Name);
         
@@ -17,5 +18,10 @@ public class CitiesFactory(TestDbContext db)
             Id = Ulid.NewUlid(),
             Name = dto.Name
         };
+    }
+
+    private NewCityDTO Nortmalize(NewCityDTO dto) {
+        dto.Name = dto.Name.ToLower();
+        return dto;
     }
 }
